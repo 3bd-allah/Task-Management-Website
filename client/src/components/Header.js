@@ -1,11 +1,8 @@
-import React, { useState } from "react";
-import { Link, NavLink, useLoaderData } from "react-router-dom";
+import React from "react";
+import { NavLink, useRouteLoaderData, useSubmit, Link } from "react-router-dom";
+import './Header.css';
+import { CiUser } from "react-icons/ci";
 
-let NavItems = [
-  { title: "Home", to: "/" },
-  { title: "Register", to: "/register" },
-  { title: "Login", to: "/login" },
-];
 
 const NavItem = ({ title, to }) => {
   
@@ -17,28 +14,53 @@ const NavItem = ({ title, to }) => {
 };
 
 const Header = () => {
-  // const token = useLoaderData();
-  // if(token){
-  //   NavItems = [
-  //     { title: "Profile", to: "/" },
-  //     { title: "logout", to: "/logout" },
-  //   ]
-  // }else{
-  //   NavItems = [
-  //     { title: "Register", to: "/register" },
-  //     { title: "Login", to: "/login" },
-  //   ]
-  // }
+  const { token, userName }= useRouteLoaderData('root');
+  const submit = useSubmit();
+
+  console.log(token)
+  console.log(userName)
+  
+  const logoutHandler = ()=>{
+    submit(null, {method:"post", action:'/logout'})
+  }
+
   return (
     <nav className="navbar bg-body-tertiary bg-primary-subtle">
       <div className="container-fluid">
         <a className="navbar-brand fs-1" href="#">ToDo App</a>
         <ul className="nav justify-content-end">
-          {NavItems.map((link) => (
-            <li key={link.title} className="nav-item">
-              <NavItem title={link.title} to={link.to} />
-            </li>
-          ))}
+
+          {userName && 
+            
+            <li className="nav-item m-2 fs-5 fw-bold text-primary" style={{paddingRight: 50}}>
+              <CiUser />
+              &nbsp; &nbsp;
+              {userName}
+            </li> }
+
+            {token? (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link fs-5">
+                    <button onClick={logoutHandler} className="btn btn-outline-primary">Logout</button>
+                  </Link>
+                </li>
+              </>
+            ):(
+              <>
+                <li className="nav-item">
+                  <NavItem title="Home" to='/' />
+                </li>
+
+                <li className="nav-item">
+                  <NavItem title="Register" to='/register' />
+                </li>
+
+                <li className="nav-item">
+                  <NavItem title="Login" to='/login' />
+                </li>
+              </>
+            )}
         </ul>
       </div>
     </nav>

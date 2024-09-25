@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TodoAPI.Models;
 using TodoAPI.Models.IdentityEntites;
+using TodoAPI.ServiceContracts;
+using TodoAPI.Services;
 namespace TodoAPI
 {
     public class Program
@@ -27,16 +29,7 @@ namespace TodoAPI
                 .AddRoleStore<RoleStore<ApplicationRole,TodoDBContext,int>>();
 
 
-            //builder.Services.AddAuthorization(options =>
-            //{
-            //    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-            //    options.FallbackPolicy = policy;
-            //});
-
-            //builder.Services.ConfigureApplicationCookie(options =>
-            //{
-            //    options.LoginPath = "/login";
-            //});
+            builder.Services.AddTransient<IJWTService, JWTService>();
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -54,7 +47,7 @@ namespace TodoAPI
                 });
             });
 
-            var app = builder.Build();
+            var app = builder.Build();  
 
 
             // Configure the HTTP request pipeline.

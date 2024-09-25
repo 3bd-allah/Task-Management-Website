@@ -20,7 +20,7 @@ export const action = async ({ request, params }) => {
   };
 
   if (!compareValidator(registerData.password, registerData.confirmPassword)) {
-    throw json({ message: "password and confirm password must be match" });
+    return json({ message: "password and confirm password must be match" });
   }
 
   const response = await fetch("http://localhost:5150/account/register", {
@@ -31,16 +31,27 @@ export const action = async ({ request, params }) => {
     body: JSON.stringify(registerData),
   });
 
+  if(response.status === 400 ){
+    return response.json().errors; 
+  }
+
+  if(response.status === 500 ){
+    return response.json().detail
+  }
+
   if (!response.ok) {
     console.log("response is not ok ");
-    throw json({ message: "Error !" }, { status: 500 });
+    throw json({ message: "Can't register a new user!" }, { status: 500 });
   } else {
 
     // extracting user data from the response 
+    // response data should be { userName, email, token, expiration }
     const resData = await response.json();
-    const userId = resData.userId
-
-    localStorage.setItem("token",registerData.email);
-    return redirect(`/user/${userId}`);
+    console.log(resData)
+    const userId = resData.id
+    // set token 
+    localStorage.setItem("token", resData.token);
+    localStorage.setItem('name', resData.userName)
+    return redirect(`/user/${userId}/todos`);
   }
 };

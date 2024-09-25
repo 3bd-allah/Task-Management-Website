@@ -9,6 +9,7 @@ using System.Reflection.Metadata.Ecma335;
 using TodoAPI.DTO;
 using TodoAPI.Models;
 using TodoAPI.Models.IdentityEntites;
+using TodoAPI.ServiceContracts;
 
 namespace TodoAPI.Controllers
 {
@@ -21,16 +22,21 @@ namespace TodoAPI.Controllers
         private readonly TodoDBContext context;
         private readonly RoleManager<ApplicationRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IJWTService jWTService;
+
         public AccountController(TodoDBContext _context,
             RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
-            TodoDBContext context)
+            TodoDBContext context,
+            IJWTService _jWTService
+            )
         {
             this.roleManager = roleManager;
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.context = context;
+            this.jWTService = _jWTService;
         }
 
 
@@ -61,16 +67,19 @@ namespace TodoAPI.Controllers
                 // sing-in
                 await signInManager.SignInAsync(user, isPersistent: false);
 
+                AuthenticationResponse authResponse = jWTService.CreateJwtToken(user);
+
                 User inContextUser = new User 
                 {  
-                    //Id = user.Id,
+                    Id = user.Id,
                     Name = registerUser.Name, 
                     Email = registerUser.Email, 
                     Password= registerUser.Password 
                 };
+
                 context.Users.Add(inContextUser);
                 context.SaveChanges();
-                return Ok(user);
+                return Ok(authResponse);
             }
             else
             {
@@ -99,14 +108,54 @@ namespace TodoAPI.Controllers
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             // validation 
+            if(!ModelState.IsValid)
+            {
+                string errorMessage = string.Join(" | ",
+                        ModelState.Values
+                        .SelectMany(temp => temp.Errors)
+                        .Select(err => err.ErrorMessage));
+                return Problem(errorMessage);
+            }
 
-
-            var result =await signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, false, false);
+            var result = await signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, 
+                isPersistent: false, lockoutOnFailure: false);
 
             if (result.Succeeded)
             {
                 ApplicationUser? user = await userManager.FindByEmailAsync(loginDTO.Email);
-                return Ok(new {PersonName = user.AccountName, Email = user.Email});
+
+                if(user is not null)
+                {
+
+                    var responsedUser = context.Users
+                        .Where(u => u.Id == user.Id)
+                        .SingleOrDefault();
+
+                    var authenticatedResponseUser = jWTService.CreateJwtToken(user);
+ 
+
+                    if(responsedUser != null)
+                    {
+
+                        return Ok(new {
+                            Id = responsedUser.Id, 
+                            Name = responsedUser.Name, 
+                            Email = responsedUser.Email,
+                            Token = authenticatedResponseUser.Token
+                        });
+                    }
+                    else
+                    {
+                        return Problem("User data doesn't exist");
+                    }
+                }
+                else
+                {
+                    return Problem("User data doesn't exist");
+                }
+
+
+
             }
             else
             {

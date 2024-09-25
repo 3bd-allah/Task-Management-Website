@@ -1,7 +1,11 @@
 import React from 'react'
 import { FaAngellist } from "react-icons/fa";
-import { Link, Form } from 'react-router-dom';
+import { Link, Form, useActionData, useNavigation } from 'react-router-dom';
 const LoginForm = () => {
+  
+  const data = useActionData();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === 'submitting' ;
   return (
     <>
       <section style={{ backgroundColor: "#eee" }} className='p-5'>
@@ -12,7 +16,8 @@ const LoginForm = () => {
           </p>
         </p>
         <Form method='POST' className='shadow p-5 m-5 bg-body-tertiary card w-25 m-auto border rounded ' >
-          
+        
+
           {/* <!-- Email input --> */}
           <div data-mdb-input-init className="form-outline mb-4">
             <label className="form-label" htmlFor="email">Email address</label>
@@ -21,12 +26,23 @@ const LoginForm = () => {
 
           {/* <!-- Password input --> */}
           <div data-mdb-input-init className="form-outline mb-4">
-            <label className="form-label" for="password">Password</label>
+            <label className="form-label" htmlFor="password">Password</label>
             <input type="password" id="password" name='password' className="form-control" required />
           </div>
+          
+          {/* Errors validation*/}
+          {
+            data && data.message && <p className='text-danger'>{data.message}</p>
+          }
 
           {/* <!-- Submit button --> */}
-          <button  type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary btn-block mb-4">Sign in</button>
+          <button  type="submit" data-mdb-button-init data-mdb-ripple-init disabled={isSubmitting} className="btn btn-primary btn-block mb-4">
+            {isSubmitting?(
+              <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            ) : 'Sign in'}
+          </button>
 
           {/* <!-- Register buttons --> */}
           <div className="text-center">

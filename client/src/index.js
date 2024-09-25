@@ -1,32 +1,44 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import App from './App'
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root'
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import RegisterPage, {action as registerAction} from './routes/RegisterPage';
-import LoginPage from './routes/LoginPage';
-import ProfilePage from './routes/ProfilePage';
+import LoginPage, {action as loginAction} from './routes/LoginPage';
+import ProfilePage, {loader as todosLoader} from './routes/ProfilePage';
 import Error from './routes/Error';
-import { getAuthToken, logoutLoader} from './util/auth';
+import { checkAuthLoader, getAuthToken, authUserLoader } from './util/auth';
 import Home from './routes/Home';
+import { logoutAction } from './routes/Logout';
+import { action as addTodoAction } from './routes/AddTodo'
+import { action as deleteAction } from'./routes/DeleteTodo';
 const router = createBrowserRouter([
-  { path: '/', element: <Root/>,
+  { 
+    path: '/',
+    element: <Root/>,
     errorElement: <Error />,
+    id:'root',
+    loader: authUserLoader,
     children:[
       { index: true, element: <Home/>, loader: getAuthToken },
       { path:'register', element: <RegisterPage />, action: registerAction},
-      { path: 'login', element: <LoginPage/> },
-      { path:'logout', loader: logoutLoader},
+      { path: 'login', element: <LoginPage/>, action: loginAction },
+      { path:'logout', action: logoutAction},
       {
-        path:'user/:userId',
+        path:'user/:userId/todos',
         id:"user-todos",
-        loader:()=>{}, // get all todos based on user id 
+        loader: checkAuthLoader,
         children:[
-          { path:'todos', element: <ProfilePage />}
+          { index:true, element: <ProfilePage />, loader: todosLoader},
+          { path: 'add', action: addTodoAction },
+          { path: ':todoId/edit', element: <ProfilePage />},
+          { path: ':todoId/delete', action: deleteAction }
+
         ]
       }
     ]

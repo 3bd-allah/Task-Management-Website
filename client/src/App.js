@@ -1,11 +1,9 @@
-import logo from './logo.svg';
-import './App.css';
 import { useState } from 'react';
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import toast, { Toaster } from 'react-hot-toast';
-function App() {
 
+
+function App() {
   const[visible, setVisible] = useState(false);
 
   return (

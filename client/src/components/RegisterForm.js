@@ -1,11 +1,13 @@
 import React from "react";
 import { FaAngellist } from "react-icons/fa";
-import { Link, Form, useActionData } from 'react-router-dom';
+import { Link, Form, useActionData, useNavigation } from 'react-router-dom';
 
 const RegisterForm = ({method}) => {
 
   const data = useActionData();
-  console.log(data)
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === 'submitting';
+  console.log(data);
 
   return (
     <section className="vh-100" style={{ backgroundColor: "#eee" }}>
@@ -112,6 +114,11 @@ const RegisterForm = ({method}) => {
                         </div>
                       </div>
 
+                      {/*Validation errors  */}
+                      {
+                        data && data.message && <p className="text-danger">{data.message}</p>
+                      }
+
                       <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                         <button
                           type="submit"
@@ -119,7 +126,8 @@ const RegisterForm = ({method}) => {
                           data-mdb-ripple-init
                           className="btn btn-primary btn-lg"
                         >
-                          Register
+                          {isSubmitting? 
+                          'Submitting...' : 'Register'}
                         </button>
                         <br/>
                       </div>
