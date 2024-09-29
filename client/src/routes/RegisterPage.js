@@ -31,12 +31,16 @@ export const action = async ({ request, params }) => {
     body: JSON.stringify(registerData),
   });
 
+  const resData = await response.json();
+
   if(response.status === 400 ){
-    return response.json().errors; 
+    // errors
+    return resData; 
   }
 
   if(response.status === 500 ){
-    return response.json().detail
+    // detail 
+    return resData;
   }
 
   if (!response.ok) {
@@ -46,10 +50,10 @@ export const action = async ({ request, params }) => {
 
     // extracting user data from the response 
     // response data should be { userName, email, token, expiration }
-    const resData = await response.json();
     console.log(resData)
     const userId = resData.id
-    // set token 
+    // set token and name of the user
+    localStorage.setItem("userId", resData.id)
     localStorage.setItem("token", resData.token);
     localStorage.setItem('name', resData.userName)
     return redirect(`/user/${userId}/todos`);

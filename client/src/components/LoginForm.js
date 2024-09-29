@@ -1,9 +1,11 @@
 import React from 'react'
 import { FaAngellist } from "react-icons/fa";
 import { Link, Form, useActionData, useNavigation } from 'react-router-dom';
+
 const LoginForm = () => {
   
   const data = useActionData();
+  console.log(data)
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting' ;
   return (
@@ -15,7 +17,7 @@ const LoginForm = () => {
             To add tour tasks <FaAngellist />
           </p>
         </p>
-        <Form method='POST' className='shadow p-5 m-5 bg-body-tertiary card w-25 m-auto border rounded ' >
+        <Form method='POST' action='/login' className='shadow p-5 m-5 bg-body-tertiary card w-25 m-auto border rounded ' >
         
 
           {/* <!-- Email input --> */}
@@ -32,7 +34,7 @@ const LoginForm = () => {
           
           {/* Errors validation*/}
           {
-            data && data.message && <p className='text-danger'>{data.message}</p>
+            data && <p className='text-danger'>{data}</p>
           }
 
           {/* <!-- Submit button --> */}

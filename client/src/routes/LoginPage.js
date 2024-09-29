@@ -26,13 +26,19 @@ export const action = async ({request, params})=>{
     body: JSON.stringify(loginData)
   })
 
+  const loginResponseData = await response.json();
+  
+  if(response.status === 500 ){
+    
+    return loginResponseData.detail;
+  }
+
   if(!response.ok){
     return json({message: "incorrect email or password"},{status:500, statusText:'Internal server error'})
   }else{
 
-    const loginResponseData = await response.json();
-
     const userId = loginResponseData.id; 
+    localStorage.setItem("userId", loginResponseData.id)
     localStorage.setItem('name', loginResponseData.name);
     localStorage.setItem('token', loginResponseData.token);
 

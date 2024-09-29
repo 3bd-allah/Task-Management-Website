@@ -4,9 +4,10 @@ import { getAuthToken } from "../util/auth";
 
 export const action = async({ request, params }) =>{
 
+    console.log(params)
     const todoId = params.todoId;
     const token = getAuthToken();
-    const response = await fetch(`http://localhost:5150:/todos/${todoId}`,{
+    const response = await fetch(`http://localhost:5150/todos/${todoId}`,{
         method:'DELETE',
         headers:{
             'Authorization': "Bearer "+ token

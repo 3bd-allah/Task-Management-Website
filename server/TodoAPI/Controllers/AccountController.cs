@@ -48,7 +48,7 @@ namespace TodoAPI.Controllers
             if (!ModelState.IsValid)
             {
                 string errorMessage = string.Join(" | ", ModelState.Values.SelectMany(e => e.Errors).Select(err => err.ErrorMessage));
-                return Problem(errorMessage);
+                return Problem(detail: errorMessage);
             }
 
             // create user
@@ -84,7 +84,7 @@ namespace TodoAPI.Controllers
             else
             {
                 string errorMessage = string.Join(" | ",
-                    result.Errors.Select(e => e.Description));
+                    result.Errors.Select(err => err.Description));
                 return Problem(errorMessage);
             }
         }

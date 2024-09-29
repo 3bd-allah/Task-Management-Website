@@ -1,31 +1,44 @@
 import { json, redirect } from "react-router";
-import { getAuthToken } from "../util/auth";
+import { getAuthToken, getUserId } from "../util/auth";
 
 
-export const action = async ({request, params}) =>{
+import React from 'react'
+import TodoForm from "../components/TodoForm";
 
-    console.log(params)
-    const userId = params.userId;
-    const enteredData = await request.formData();
-    const todoData = {
-        title: enteredData.get('title'),
-        description: enteredData.get('description')
-    }
-
-    const token = getAuthToken();
-    const response = await fetch(`http://localhost:5150/user/${userId}/addtodo`, {
-        method: request.method,
-        headers:{
-            'Content-Type':'application/json',
-            'Authorization': "Bearer " + token
-        },
-        body: JSON.stringify(todoData)
-    })
-
-    if(!response.ok){
-        throw json()
-    }else{
-        return redirect (`/user/${userId}/todos`)
-    }
-
+const AddTodoPage = () => {
+  return <TodoForm method="POST" button="Add Task" />
 }
+
+export default AddTodoPage
+
+// export const action = async ({ request }) =>{
+
+//     const userId = getUserId();
+//     const enteredData = await request.formData();
+//     const todoData = {
+//         title: enteredData.get('title'),
+//         description: enteredData.get('description')
+//     }
+
+//     const token = getAuthToken();
+//     const response = await fetch(`http://localhost:5150/user/${userId}/addtodo`, {
+//         method: request.method,
+//         headers:{
+//             'Content-Type':'application/json',
+//             'Authorization': "Bearer " + token
+//         },
+//         body: JSON.stringify(todoData)
+//     })
+
+//     const resData =await response.json();
+//     if(response.status === 400 || response.status === 500){
+//         return resData ;
+//     }
+
+//     if(!response.ok){
+//         throw json({message: "Can't add task."})
+//     }else{
+//         return redirect (`/user/${userId}/todos`)
+//     }
+
+// }

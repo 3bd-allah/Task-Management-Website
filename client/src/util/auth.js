@@ -20,7 +20,13 @@ export const tokenLoader = ()=>{
     return getAuthToken();
 }
 
+export const getUserId =()=>{
+    const userId = localStorage.getItem("userId");
+    return userId; 
+}
 
+
+// route protection
 export const checkAuthLoader = ()=>{
 
     const token = getAuthToken();

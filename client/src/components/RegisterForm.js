@@ -2,7 +2,7 @@ import React from "react";
 import { FaAngellist } from "react-icons/fa";
 import { Link, Form, useActionData, useNavigation } from 'react-router-dom';
 
-const RegisterForm = ({method}) => {
+const RegisterForm = () => {
 
   const data = useActionData();
   const navigation = useNavigation();
@@ -32,6 +32,7 @@ const RegisterForm = ({method}) => {
                           data-mdb-input-init
                           className="form-outline flex-fill mb-0"
                         >
+                          {/* User Name */}
                           <label
                             className="form-label"
                             htmlFor="name"
@@ -54,6 +55,7 @@ const RegisterForm = ({method}) => {
                           data-mdb-input-init
                           className="form-outline flex-fill mb-0"
                         >
+                          {/* Email */}
                           <label
                             className="form-label"
                             htmlFor="email"
@@ -76,6 +78,7 @@ const RegisterForm = ({method}) => {
                           data-mdb-input-init
                           className="form-outline flex-fill mb-0"
                         >
+                          {/* Password */}
                           <label
                             className="form-label"
                             htmlFor="password"
@@ -98,6 +101,7 @@ const RegisterForm = ({method}) => {
                           data-mdb-input-init
                           className="form-outline flex-fill mb-0"
                         >
+                          {/* Confirm Password */}
                           <label
                             className="form-label"
                             htmlFor="confirmPassword"
@@ -115,8 +119,19 @@ const RegisterForm = ({method}) => {
                       </div>
 
                       {/*Validation errors  */}
+
+                      {data && data.message && <p className="text-danger">{data.message}</p>}
+                      {data && data.detail &&
+                        <ul>
+                          {data.detail.split(" | ").map( err => <li key={err} className="text-danger">{err}</li> )}
+                        </ul>
+                      }
+
                       {
-                        data && data.message && <p className="text-danger">{data.message}</p>
+                        data && data.errors &&
+                        <ul>
+                          {Object.values(data.errors).map(err => <li key={err} className="text-danger">{err}</li>)}
+                        </ul>
                       }
 
                       <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
