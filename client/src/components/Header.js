@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useRouteLoaderData, useSubmit, Link, useParams } from "react-router-dom";
+import { NavLink, useRouteLoaderData, useSubmit, Link } from "react-router-dom";
 import './Header.css';
 import { CiUser } from "react-icons/ci";
 
@@ -14,10 +14,8 @@ const NavItem = ({ title, to }) => {
 };
 
 const Header = () => {
-  const { token, userName }= useRouteLoaderData('root');
-  const params = useParams();
+  const {userId, token, userName }= useRouteLoaderData('root');
   const submit = useSubmit();
-  const userId = params.userId;
   console.log(token)
   console.log(userName)
   

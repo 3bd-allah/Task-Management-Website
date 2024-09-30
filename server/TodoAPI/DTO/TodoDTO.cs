@@ -9,5 +9,7 @@ namespace TodoAPI.DTO
 
         [Required(ErrorMessage = "Description of todo is required")]
         public string Description { get; set; }
+
+        public bool Status { get; set; }
     }
 }

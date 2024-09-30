@@ -11,9 +11,10 @@ export const getUserName = ()=>{
 }
 
 export const authUserLoader = ()=>{
+    const userId = getUserId();
     const token = getAuthToken();
     const userName = getUserName();
-    return {token, userName}
+    return {token, userName, userId}
 }
 
 export const tokenLoader = ()=>{

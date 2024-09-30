@@ -92,6 +92,40 @@ namespace TodoAPI.Controllers
         }
 
 
+        // TODO: update Todo status
+        [HttpPut("/update/todoStatus/{todoId}")]
+        public IActionResult UpdateTodoStatus (int todoId, TodoStatusDTO todoStatus)
+        {
+            Todo? todo = context.Todos
+                .Where(t => t.TodoId == todoId)
+                .SingleOrDefault();
+            if(todo is not null)
+            {
+                if(todoStatus.Status == "true" || todoStatus.Status == "false")
+                {
+                    if(todoStatus.Status == "true")
+                    {
+                        todo.Completed = true;
+                        context.Todos.Update(todo);
+                        context.SaveChanges();
+                        return Ok();
+                    }
+                    
+                    todo.Completed = false;
+                    context.Todos.Update(todo);
+                    context.SaveChanges();
+                    return Ok();
+
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            return Problem("Todo not found!");
+        }
+
+
             
         [HttpDelete("/todos/{todoId}")]
         public IActionResult DeleteTodo (int todoId)

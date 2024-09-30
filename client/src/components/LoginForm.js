@@ -40,8 +40,8 @@ const LoginForm = () => {
           {/* <!-- Submit button --> */}
           <button  type="submit" data-mdb-button-init data-mdb-ripple-init disabled={isSubmitting} className="btn btn-primary btn-block mb-4">
             {isSubmitting?(
-              <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
+              <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
             </div>
             ) : 'Sign in'}
           </button>

@@ -18,6 +18,7 @@ import AddTodoPage, { action as addTodoAction } from './routes/AddTodo';
 import { action as deleteAction } from'./routes/DeleteTodo';
 import EditTodoPage, { singleTodoLoader } from './routes/EditTodo';
 import { action as manipulateTodoAction } from './components/TodoForm';
+import { action as updateTodoStatusAction } from './routes/UpdateTodoStatus'
 const router = createBrowserRouter([
   { 
     path: '/',
@@ -48,7 +49,8 @@ const router = createBrowserRouter([
           },
 
         ]
-      }
+      }, 
+      { path:'update/status/:todoId', action: updateTodoStatusAction }
     ]
   }
 ]);

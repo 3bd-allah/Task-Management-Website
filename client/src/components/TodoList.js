@@ -1,6 +1,5 @@
 import React from "react";
-import { MdCheckBox } from "react-icons/md";
-import { Link, useNavigate, useNavigation, useParams, useSubmit } from "react-router-dom";
+import { Link, useNavigation, useSubmit } from "react-router-dom";
 import { getUserId } from "../util/auth";
 
 
@@ -9,16 +8,21 @@ const TodoList = ({ todos }) => {
   const navigation = useNavigation();
   const isLoading = navigation.state === "loading";
 
+  const updateStatusHandler = (todoStatus, todoId)=>{
+    submit({status: todoStatus },{method:"PUT", action:`/update/status/${todoId}`})
+  }
+
   const deleteHandler = (todoId)=>{
     const proceed = window.confirm("Are you sure that you want to delete this task.")
     if(proceed){
       const userId = getUserId();
       submit(null, {method:'delete', action: `/user/${userId}/todos/${todoId}/delete`})
     }
-  } 
+  }
   
   return (
     <div className="container col justify-content-center">
+      <h1 className="m-2">Tasks</h1>
       <div className='m-3'>
         <Link to='add' >
           <button className='btn btn-outline-primary '>Add New Task</button>
@@ -35,27 +39,40 @@ const TodoList = ({ todos }) => {
         </thead>
         {todos.length !== 0 ? (
           <tbody>
-            {todos.map((todo) => (
-              <tr key={todo.id}>
-                <td className={todo.completed && "text-decoration-line-through"}>
+            {todos.map((todo,index) => (
+              <tr key={index}>
+                
+                {/* title */}
+                <td className={todo.completed ? "text-decoration-line-through" : undefined }>
                   {todo.title}
                 </td>
-                <td>{todo.description}</td>
-                <td>
-                  <label>
-                    <input
-                      id="status"
-                      name="status"
-                      type="checkbox"
-                      checked={todo.completed}
-                    />
-                    &nbsp; Completed
-                  </label>
+
+                {/* description */}
+                <td className={todo.completed ? "text-decoration-line-through" : undefined }>
+                  {todo.description}
                 </td>
+                
+                {/* status */}
+                <td>  
+                    <label>
+                      <input
+                        id="status"
+                        name="status"
+                        type="checkbox"
+                        onChange={(e)=> updateStatusHandler(e.target.checked, todo.todoId)}
+                        defaultChecked={todo.completed ? true: false}
+                        />
+                      &nbsp; Completed
+                    </label>
+                </td>
+
+                {/* handle */}
                 <td className="text-center">
+                  {/* edit */}
                   <Link to={`${todo.todoId}/edit`}>
                     <button className="btn btn-outline-secondary"> Edit </button>
                   </Link>
+                  {/* delete */}
                   <button
                     className="btn btn-outline-danger"
                     style={{ marginLeft: 5 }}

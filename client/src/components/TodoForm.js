@@ -61,8 +61,8 @@ const TodoForm = ({method, button, todo}) => {
             <button className='btn btn-outline-primary w-100' disabled={isSubmitting}> 
               {
                 isSubmitting? (
-                  <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                  <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Loading...</span>
                   </div>
                 ):
                 button  
