@@ -11,67 +11,73 @@ const TodoForm = ({method, button, todo}) => {
   console.log(data)
   return (
 
-    <Form method={method} className={classes.form}>
-      
-      {/* Title */}
-      <p>
-        <label htmlFor="title">Title</label>
-        <input
-          id="title"
-          type="text"
-          name="title"
-          defaultValue={todo? todo.title : ''}
-          required
-        />
-      </p>
+    <div className='container row m-auto'>
+      <div className='col-7 m-auto'>
+        <h1 className='mt-5 text-start'>{todo? 'Edit Task': 'Add New Task'}</h1>
+        <Form method={method} className={classes.form}>
+          
+          {/* Title */}
+          <p>
+            <label htmlFor="title">Title</label>
+            <input
+              id="title"
+              type="text"
+              name="title"
+              defaultValue={todo? todo.title : ''}
+              required
+            />
+          </p>
 
-      {/* Description  */}
-      <p>
-        <label htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          name="description"
-          rows="3"
-          defaultValue={todo? todo.description : ''}
-          required
-        />
-      </p>
-      
-      {/* Errors validation */}
-      { 
-        data && data.detail && 
-        <ul>
-          {data.detail.split(" | ").map(errMessage => <li key={errMessage} className='text-danger'>{errMessage}</li>)}
-        </ul>
-      }
-      {
-        data && data.errors && 
-        <ul>
-          {Object.values(data.errors).map(err => <li key={err} className='text-danger'>{err}</li>)}
-        </ul>
-      }
-      <div className='container text-center'>
-        <div className='row justify-content-end'>
-          <div className='col-4 '>
-            <Link to={`/user/${params.userId}/todos`}>
-              <button className='btn btn-secondary w-100'> Cancel </button>
-            </Link>
+          {/* Description  */}
+          <p>
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="3"
+              defaultValue={todo? todo.description : ''}
+              required
+            />
+          </p>
+          
+          {/* Errors validation */}
+          { 
+            data && data.detail && 
+            <ul>
+              {data.detail.split(" | ").map(errMessage => <li key={errMessage} className='text-danger'>{errMessage}</li>)}
+            </ul>
+          }
+          {
+            data && data.errors && 
+            <ul>
+              {Object.values(data.errors).map(err => <li key={err} className='text-danger'>{err}</li>)}
+            </ul>
+          }
+          <div className='container text-center'>
+            <div className='row justify-content-end'>
+              <div className='col-4 '>
+                <Link to={`/user/${params.userId}/todos`}>
+                  <button className='btn btn-secondary w-100'> Cancel </button>
+                </Link>
+              </div>
+              <div className='col-4'>
+                <button className='btn btn-outline-primary w-100' disabled={isSubmitting}> 
+                  {
+                    isSubmitting? (
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    ):
+                    button  
+                  }
+                </button>
+              </div>
+            </div>
           </div>
-          <div className='col-4'>
-            <button className='btn btn-outline-primary w-100' disabled={isSubmitting}> 
-              {
-                isSubmitting? (
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                ):
-                button  
-              }
-            </button>
-          </div>
-        </div>
+        </Form>
       </div>
-    </Form>
+
+    </div>
   )
 }
 

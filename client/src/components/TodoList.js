@@ -41,7 +41,7 @@ const TodoList = ({ todos }) => {
           <tbody>
             {todos.map((todo,index) => (
               <tr key={index}>
-                
+
                 {/* title */}
                 <td className={todo.completed ? "text-decoration-line-through" : undefined }>
                   {todo.title}
@@ -51,9 +51,9 @@ const TodoList = ({ todos }) => {
                 <td className={todo.completed ? "text-decoration-line-through" : undefined }>
                   {todo.description}
                 </td>
-                
+
                 {/* status */}
-                <td>  
+                <td>
                     <label>
                       <input
                         id="status"
@@ -62,7 +62,7 @@ const TodoList = ({ todos }) => {
                         onChange={(e)=> updateStatusHandler(e.target.checked, todo.todoId)}
                         defaultChecked={todo.completed ? true: false}
                         />
-                      &nbsp; Completed
+                        &nbsp; Completed
                     </label>
                 </td>
 

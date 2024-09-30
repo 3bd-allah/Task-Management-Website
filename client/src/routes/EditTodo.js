@@ -4,7 +4,7 @@ import { useRouteLoaderData, json, useLoaderData } from 'react-router';
 
 const EditTodoPage = () => {
 
-    const todo = useRouteLoaderData('single-todo');
+  const todo = useRouteLoaderData('single-todo');
   return <TodoForm todo={todo} method="PUT" button="Save Changes"/>
 }
 
