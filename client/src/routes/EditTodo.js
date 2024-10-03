@@ -1,6 +1,7 @@
 import React from 'react'
 import TodoForm from '../components/TodoForm';
-import { useRouteLoaderData, json, useLoaderData } from 'react-router';
+import { useRouteLoaderData, json} from 'react-router';
+import { getAuthToken } from '../util/auth';
 
 const EditTodoPage = () => {
 
@@ -14,7 +15,12 @@ export const singleTodoLoader = async({request, params}) => {
 
     const todoId = params.todoId;
   
-    const response = await fetch(`http://localhost:5150/todo/${todoId}`)
+    const token = getAuthToken();
+    const response = await fetch(`http://localhost:5150/todo/${todoId}`,{
+      headers:{
+        'Authorization': 'Bearer '+ token
+      }
+    })
   
     const resData = await response.json();
 

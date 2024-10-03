@@ -25,13 +25,14 @@ export const todosLoader = async ({request, params})=>{
       'Authorization': "Bearer " + token
     }
   })
-  const resData = await response.json();
-  
+
+
   if(!response.ok){
-    throw json({message:"can't fetch tasks"},{status:500, statusText:"Internal server error!"})
+    throw json({message:"can't fetch tasks"},{status:404, statusText:"Internal server error!"})
   }
 
-  // response should return with list of  todos
+  // response should return with list of todos
+  const resData = await response.json();
   return resData;
 
 }

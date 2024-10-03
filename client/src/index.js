@@ -5,7 +5,6 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import RegisterPage, {action as registerAction} from './routes/RegisterPage';
 import LoginPage, {action as loginAction} from './routes/LoginPage';
@@ -19,6 +18,7 @@ import { action as deleteAction } from'./routes/DeleteTodo';
 import EditTodoPage, { singleTodoLoader } from './routes/EditTodo';
 import { action as manipulateTodoAction } from './components/TodoForm';
 import { action as updateTodoStatusAction } from './routes/UpdateTodoStatus'
+
 const router = createBrowserRouter([
   { 
     path: '/',

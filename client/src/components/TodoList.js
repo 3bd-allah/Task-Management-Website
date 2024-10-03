@@ -53,7 +53,7 @@ const TodoList = ({ todos }) => {
                 </td>
 
                 {/* status */}
-                <td>
+                <td key={index}>
                     <label>
                       <input
                         id="status"

@@ -123,7 +123,7 @@ namespace TodoAPI.Controllers
             if (result.Succeeded)
             {
                 ApplicationUser? user = await userManager.FindByEmailAsync(loginDTO.Email);
-
+                
                 if(user is not null)
                 {
 
@@ -142,7 +142,7 @@ namespace TodoAPI.Controllers
                             Name = responsedUser.Name, 
                             Email = responsedUser.Email,
                             Token = authenticatedResponseUser.Token
-                        });
+                        }); 
                     }
                     else
                     {

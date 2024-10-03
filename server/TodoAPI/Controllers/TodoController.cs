@@ -9,7 +9,7 @@ namespace TodoAPI.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    //[Authorize("Bearer ")]
+    [Authorize]
     public class TodoController : ControllerBase
     {
         private readonly TodoDBContext context;
@@ -33,7 +33,10 @@ namespace TodoAPI.Controllers
         [HttpGet("/todo/{todoId}")]
         public IActionResult GetSingleTodo (int todoId)
         {
-            Todo? todo = context.Todos.Where(t => t.TodoId == todoId).SingleOrDefault();
+            var todo = context.Todos.Where(t => t.TodoId == todoId)
+                .Select(t => 
+                new { t.Title, t.Description})
+                .SingleOrDefault();
             if(todo is not null)
             {
                 return Ok(todo);
@@ -49,25 +52,33 @@ namespace TodoAPI.Controllers
         // route: /user/{userId}/addTodo
         public IActionResult AddTodo(int id, TodoDTO todoDTO)
         {
-            if (!ModelState.IsValid)
+            var user = context.Users.Where(u => u.Id == id).Select(u => new {u.Id}).SingleOrDefault();
+            if(user is not null)
             {
-                string errorMessage = string.Join(" | " , ModelState.Values
-                    .SelectMany(errs => errs.Errors)
-                    .Select(err => err.ErrorMessage));
-                return Problem(detail: errorMessage);
+                if (!ModelState.IsValid)
+                {
+                    string errorMessage = string.Join(" | " , ModelState.Values
+                        .SelectMany(errs => errs.Errors)
+                        .Select(err => err.ErrorMessage));
+                    return Problem(detail: errorMessage);
+                }
+                Todo todo = new Todo()
+                {
+                    Title = todoDTO.Title,
+                    Description = todoDTO.Description,
+                    Completed = false,
+                    UserId = id
+                };
+
+                context.Todos.Add(todo);   
+                context.SaveChanges();
+
+                return Ok(true);
             }
-            Todo todo = new Todo()
+            else
             {
-                Title = todoDTO.Title,
-                Description = todoDTO.Description,
-                Completed = false,
-                UserId = id
-            };
-
-            context.Todos.Add(todo);   
-            context.SaveChanges();
-
-            return Ok(true);
+                return Problem("User is not found");
+            }
 
         }
 
